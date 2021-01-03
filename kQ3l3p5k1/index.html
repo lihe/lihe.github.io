@@ -1,0 +1,216 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>使用Gridea+Github Pages搭建个人博客并绑定域名 | Leslie</title>
+<link rel="shortcut icon" href="https://leslie.today/favicon.ico?v=1609689663109">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://leslie.today/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="使用Gridea+Github Pages搭建个人博客并绑定域名 | Leslie - Atom Feed" href="https://leslie.today/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="搭建个人静态博客
+
+创建GitHub Pages仓库
+在GitHub首页，点击+号-&gt;New repository
+
+仓库的名称必须是用户名.github.io（我已经创建过这个仓库，所以会报错）
+
+设置Gridea
+Gridea是一..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://leslie.today">
+  <img class="avatar" src="https://leslie.today/images/avatar.png?v=1609689663109" alt="">
+  </a>
+  <h1 class="site-title">
+    Leslie
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/lihe" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              使用Gridea+Github Pages搭建个人博客并绑定域名
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-01-03
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20201231100941.jpeg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>搭建个人静态博客</p>
+<!-- more -->
+<h2 id="创建github-pages仓库">创建GitHub Pages仓库</h2>
+<p>在GitHub首页，点击+号-&gt;New repository</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103233236.png" alt="image-20210103233236299" loading="lazy"></figure>
+<p>仓库的名称必须是<code>用户名.github.io</code>（我已经创建过这个仓库，所以会报错）</p>
+<figure data-type="image" tabindex="2"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103233405.png" alt="image-20210103233405529" loading="lazy"></figure>
+<h2 id="设置gridea">设置Gridea</h2>
+<p>Gridea是一个静态博客的写作客户端</p>
+<p>点击<a href="https://gridea.dev/">此处</a>的连接，如图，下载Gridea</p>
+<figure data-type="image" tabindex="3"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103233949.png" alt="image-20210103233949331" loading="lazy"></figure>
+<p>安装完成后，配置Gridex，点击远程，如图所示</p>
+<figure data-type="image" tabindex="4"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103234257.png" alt="image-20210103234256962" loading="lazy"></figure>
+<p><code>令牌</code>可由如下操作生成</p>
+<p><code>Settings -&gt; Developer Settings -&gt; Personal access tokens -&gt; Generate new token</code></p>
+<p><mark>创建成功后，会生成一串token，这串token之后不会再显示，所以要好好保存。</mark></p>
+<p>Gridex配置完成后，点击<code>检测远程连接</code>，连接成功后，点击保存。</p>
+<p>你可以根据自己的喜好选择主题，具体可参考<a href="https://gridea.dev/gridea-start/">快速上手</a></p>
+<h2 id="绑定域名">绑定域名</h2>
+<p>去运营商处购买域名，我是在<a href="https://dnspod.cloud.tencent.com/">腾讯云</a>购买，新用户有很大优惠，可以选择一些.xyz、.today之类的便宜域名，我的是25元/年。</p>
+<p>新用户需要上传个人信息进行备案，会有提示，跟着操作就行。</p>
+<p>在cmd中使用ping命令找领导你的GitHub Page的主机地址，如图所示<img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103231924.png" alt="image-20210103231924685" loading="lazy"></p>
+<p>进入域名控制台，解析域名<img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103232510.png" alt="image-20210103232510805" loading="lazy"></p>
+<p>添加两条记录，格式如下图所示，第一条的记录值，为第上面ping得的ip地址</p>
+<figure data-type="image" tabindex="5"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103232540.png" alt="image-20210103232540455" loading="lazy"></figure>
+<p>在你的仓库中的Settings中找到Github Pages，如下图设置，点击保存<img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210103232905.png" alt="image-20210103232905051" loading="lazy"></p>
+<hr>
+<p>至此，你的个人博客已经搭建完毕并与域名绑定，你可以通过Gridea方便地进行写作和管理博客。</p>
+<p>接下来要做的就是在热爱中继续前进了。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BAgithub-pages%E4%BB%93%E5%BA%93">创建GitHub Pages仓库</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AEgridea">设置Gridea</a></li>
+<li><a href="#%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D">绑定域名</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://leslie.today/MkvzkBpkX/">
+              <h3 class="post-title">
+                如何优雅地科学上网
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://leslie.today/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
