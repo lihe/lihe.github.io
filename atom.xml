@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lihe.github.io</id>
     <title>Leslie</title>
-    <updated>2021-01-03T16:21:56.188Z</updated>
+    <updated>2021-01-03T16:22:52.101Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lihe.github.io"/>
     <link rel="self" href="https://lihe.github.io/atom.xml"/>
@@ -18,17 +18,6 @@
         <summary type="html"><![CDATA[<p>搭建个人静态博客</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>搭建个人静态博客</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[如何优雅地科学上网]]></title>
-        <id>https://lihe.github.io/MkvzkBpkX/</id>
-        <link href="https://lihe.github.io/MkvzkBpkX/">
-        </link>
-        <updated>2021-01-03T13:02:08.000Z</updated>
-        <summary type="html"><![CDATA[<p>使用Chrome插件实现科学上网</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>使用Chrome插件实现科学上网</p>
 ]]></content>
     </entry>
 </feed>
