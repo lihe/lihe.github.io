@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://leslie.today</id>
+    <id>https://lihe.github.io</id>
     <title>Leslie</title>
-    <updated>2021-01-03T16:07:05.933Z</updated>
+    <updated>2021-01-03T16:07:41.383Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://leslie.today"/>
-    <link rel="self" href="https://leslie.today/atom.xml"/>
-    <logo>https://leslie.today/images/avatar.png</logo>
-    <icon>https://leslie.today/favicon.ico</icon>
+    <link rel="alternate" href="https://lihe.github.io"/>
+    <link rel="self" href="https://lihe.github.io/atom.xml"/>
+    <logo>https://lihe.github.io/images/avatar.png</logo>
+    <icon>https://lihe.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leslie</rights>
     <entry>
         <title type="html"><![CDATA[使用Gridea+Github Pages搭建个人博客并绑定域名]]></title>
-        <id>https://leslie.today/kQ3l3p5k1/</id>
-        <link href="https://leslie.today/kQ3l3p5k1/">
+        <id>https://lihe.github.io/kQ3l3p5k1/</id>
+        <link href="https://lihe.github.io/kQ3l3p5k1/">
         </link>
         <updated>2021-01-03T15:59:18.000Z</updated>
         <summary type="html"><![CDATA[<p>搭建个人静态博客</p>
@@ -22,8 +22,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[如何优雅地科学上网]]></title>
-        <id>https://leslie.today/MkvzkBpkX/</id>
-        <link href="https://leslie.today/MkvzkBpkX/">
+        <id>https://lihe.github.io/MkvzkBpkX/</id>
+        <link href="https://lihe.github.io/MkvzkBpkX/">
         </link>
         <updated>2021-01-03T13:02:08.000Z</updated>
         <summary type="html"><![CDATA[<p>使用Chrome插件实现科学上网</p>
