@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lihe.github.io/</id>
-    <title>Leslie&apos;s github page</title>
-    <updated>2021-01-03T12:55:29.557Z</updated>
+    <title>Leslie</title>
+    <updated>2021-01-03T12:57:37.150Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lihe.github.io/"/>
     <link rel="self" href="https://lihe.github.io/atom.xml"/>
     <logo>https://lihe.github.io/images/avatar.png</logo>
     <icon>https://lihe.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Leslie&apos;s github page</rights>
+    <rights>All rights reserved 2021, Leslie</rights>
     <entry>
         <title type="html"><![CDATA[如何优雅地科学上网]]></title>
         <id>https://lihe.github.io/ru-he-you-ya-di-ke-xue-shang-wang/</id>
