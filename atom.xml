@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://leslie.today</id>
     <title>Leslie</title>
-    <updated>2021-01-03T14:52:01.937Z</updated>
+    <updated>2021-01-03T14:56:48.334Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://leslie.today"/>
     <link rel="self" href="https://leslie.today/atom.xml"/>
