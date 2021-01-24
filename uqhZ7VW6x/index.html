@@ -39,33 +39,9 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-                <a href="https://github.com/lihe" target="_blank" class="mr-4 text-xl text-gray-400 font-light hover:text-gray-900">
-                  <i class="ri-github-line"></i>
-                </a>
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
+          <div class="toc-container hidden lg:block">
             
           </div>
         </div>
@@ -110,18 +86,69 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="text-lg text-gray-700 mb-8">
-          <i class="ri-bookmark-2-line"></i> 标签云
-        </h2>
-        <div class="tags-container">
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">当函数返回值是引用</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2021-01-24 / 2 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210119213917.jpg" alt="">
+        
+        <div class="post-content yue">
+          <p>调用一个返回引用的函数得到左值</p>
+<!-- more -->
+<p>同其他引用类型一样，如果函数返回引用，则该引用仅是它所引对象的一个别名。举个例子来说明，假定某函数挑出两个string 形参中较短的那个并返回其引用：函数的返回类型决定函数调用是否是左值。</p>
+<pre><code class="language-c++">const string &amp;shorterString(const string &amp;s1, const string &amp;s2){
+    return s1.size() &lt;= s2.size() ? s1 : s2;
+}
+</code></pre>
+<p>其中形参和返回类型都是 const string 的引用，不管是调用函数还是返回结果都不会真正拷贝 string对象。</p>
+<p>调用一个返回引用的函数得到左值，其他返回类型得到右值。</p>
+<p>可以像使用其他左值那样来使用返回引用的函数的调用，特别是，我们能为返回类型是非常量引用的函数的结果赋值∶</p>
+<pre><code class="language-c++">char &amp;get_val(string &amp;str, string::size_type ix){
+    return str[ix];
+}
+
+int main(){
+    string s(&quot;a value&quot;);
+    cout &lt;&lt; s &lt;&lt; endl;
+    get_val(s, 0) = 'A';
+    cout &lt;&lt; a &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<p>把函数调用放在赋值语句的左侧可能看起来有点奇怪，但其实这没什么特别的。</p>
+<p>返回值是引用，因此调用是个左值，和其他左值一样它也能出现在赋值运算符的左侧。</p>
+<p>如果返回类型是常量引用，我们不能给调用的结果赋值，这一点和我们熟悉的情况是一样的∶</p>
+<pre><code class="language-c++">shorterString(&quot;hi&quot;, &quot;bye&quot;) = &quot;X&quot;;     // 错误：返回值是一个常量
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://lihe.github.io/grKtjP_mW/">
+            <span class="flex-auto">C++</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
           
-            <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://lihe.github.io/grKtjP_mW/" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-              <span class="flex-auto">C++</span>
-              <span class="flex rounded-full bg-gray-200 px-2 py-1 text-xs ml-1">2</span>
-            </a>
+
+          
+            <div class="next-post">
+              <a href="https://lihe.github.io/ys3lkqN2L/">
+                <h3 class="post-title">
+                  const限定符
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
           
         </div>
+
+        
+
       </div>
     </div>
 
