@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lihe.github.io</id>
     <title>Leslie</title>
-    <updated>2021-01-24T04:06:43.785Z</updated>
+    <updated>2021-01-24T04:46:08.061Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lihe.github.io"/>
     <link rel="self" href="https://lihe.github.io/atom.xml"/>
     <logo>https://lihe.github.io/images/avatar.png</logo>
     <icon>https://lihe.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leslie</rights>
+    <entry>
+        <title type="html"><![CDATA[如何优雅地科学上网]]></title>
+        <id>https://lihe.github.io/4xUs9g4T7/</id>
+        <link href="https://lihe.github.io/4xUs9g4T7/">
+        </link>
+        <updated>2021-01-24T04:42:03.000Z</updated>
+        <summary type="html"><![CDATA[<p>使用谷歌浏览器插件实现科学上网</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>使用谷歌浏览器插件实现科学上网</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[使用Gridea+Github Pages搭建个人博客并绑定域名]]></title>
         <id>https://lihe.github.io/kQ3l3p5k1/</id>
