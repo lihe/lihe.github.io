@@ -39,34 +39,17 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-                <a href="https://github.com/lihe" target="_blank" class="mr-4 text-xl text-gray-400 font-light hover:text-gray-900">
-                  <i class="ri-github-line"></i>
-                </a>
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E8%8C%83%E5%9B%B4">迭代器范围</a></li>
+</ul>
+</li>
+</ul>
+
           </div>
         </div>
       
@@ -104,72 +87,62 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="text-lg text-gray-700 mb-8">
-          <i class="ri-bookmark-line"></i> C++
-        </h2>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">迭代器</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2021-01-25 / 3 min read
+        </div>
         
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-    
-      <a href="https://lihe.github.io/9l5KCVQpu/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210124182059.jpg'">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125133004.jpg" alt="">
+        
+        <div class="post-content yue">
+          <p>迭代器的运算和范围</p>
+<!-- more -->
+<p>与容器一样，迭代器有着公共的接口： 如果一个迭代器提供某个操作，那么所有提供相同操作的迭代器对这个操作的实现方式都是相同的。</p>
+<p>例如，标准容器类型上的所有迭代器都允许我们访问容器中的元素，而所有迭代器都是通过解引用运算符来实现这个操作的。</p>
+<p>类似的，标准库容器的所有迭代器都定义了递增运算符，从当前元素移动到下一个元素。</p>
+<p>表3.6列出了容器迭代器支持的所有操作，其中有一个例外不符合公共接口特点——forward_list迭代器不支持递减运算符（--）。表3.7列出了迭代器支持的算术运算，这些运算只能应用于string、vector、deque和array的迭代器。我们不能将它们用于其他任何容器类型的迭代器。</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125132220.png" alt="image-20210125132220489" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125132235.png" alt="image-20210125132235486" loading="lazy"></figure>
+<h2 id="迭代器范围">迭代器范围</h2>
+<p>一个迭代器范围（iterator range）由一对迭代器表示，两个迭代器分别指向同一个容器中的元素或者是<mark>尾元素之后</mark>的位置（one past the last element）。这两个迭代器通常被称为begin和end，或者是 first和last（可能有些误导），它们标记了容器中元素的一个范围。</p>
+<p>虽然第二个迭代器常常被称为 last，但这种叫法有些误导，因为<mark>第二个迭代器从来都不会指向范围中的最后一个元素，而是指向尾元素之后的位置</mark>。迭代器范围中的元素包含 first 所表示的元素以及从first开始直至last（但不包含last）之间的所有元素。</p>
+<p>这种元素范围被称为左闭合区间（left-inclusive interval），其标准数学描述为[begin, end)</p>
+<p>表示范围自begin开始，于end之前结束。迭代器begin和end必须指向相同的容器。 end可以与begin指向相同的位置，但不能指向begin之前的位置。</p>
+<p>标准库使用左闭合范围是因为这种范围有三种方便的性质。假定 begin和end构成一个合法的迭代器范围，则</p>
+<ul>
+<li>如果 begin 与end相等，则范围为空</li>
+<li>如果 begin与end 不等，则范围至少包含一个元素，且begin指向该范围中的第一个元素</li>
+<li>我们可以对 begin 递增若干次，使得 begin==end这些性质意味着我们可以像下面的代码一样用一个循环来处理一个元素范围，而这是安全的∶</li>
+</ul>
+<pre><code class="language-c++">while (begin != end){
+    *begin = val;     // 正确：范围非空，因此begin指向一个元素
+    ++begin;          // 移动迭代器，获取下一个元素
+}
+</code></pre>
+<p>给定构成一个合法范围的迭代器begin 和end，若begin=end，则范围为空。在此情况下，我们应该退出循环。如果范围不为空，begin指向此非空范围的一个元素。因此，在 while循环体中，可以安全地解引用 begin，因为 begin必然指向一个元素。最后，由于每次循环对 begin 递增一次，我们确定循环最终会结束。</p>
+
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://lihe.github.io/9l5KCVQpu/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">顺序容器</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        <p>vector、deque、list等</p>
 
-      </div>
-      <div class="text-gray-400 text-sm font-light">2021-01-24 / 4 min read</div>
-    </div>
-  </section>
+        
 
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
-    
-      <a href="https://lihe.github.io/uqhZ7VW6x/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210119213917.jpg'">
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://lihe.github.io/9l5KCVQpu/">
+                <h3 class="post-title">
+                  顺序容器
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://lihe.github.io/uqhZ7VW6x/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">当函数返回值是引用</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        <p>调用一个返回引用的函数得到左值</p>
 
-      </div>
-      <div class="text-gray-400 text-sm font-light">2021-01-24 / 2 min read</div>
-    </div>
-  </section>
-
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${2 * 0.2}s` }">
-    
-      <a href="https://lihe.github.io/ys3lkqN2L/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210118174902.jpg'">
-        </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://lihe.github.io/ys3lkqN2L/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">const限定符</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        <p>const的应用、const和指针、顶层const、constexpr和常量表达式</p>
-
-      </div>
-      <div class="text-gray-400 text-sm font-light">2021-01-24 / 17 min read</div>
-    </div>
-  </section>
-
-        <div class="pagination-container animated fadeIn">
-  
-  
-</div>
+        
 
       </div>
     </div>
