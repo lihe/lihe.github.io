@@ -45,7 +45,8 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E7%A1%AE%E5%AE%9A%E4%BD%BF%E7%94%A8%E5%93%AA%E7%A7%8D%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8">确定使用哪种顺序容器</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8assign%E4%BB%85%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8">使用assign（仅顺序容器）</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8swap">使用swap</a></li>
 </ul>
 </li>
 </ul>
@@ -88,71 +89,61 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">顺序容器</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">swap与assign</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-24 / 4 min read
+          2021-01-25 / 5 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210124182059.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125143850.png" alt="">
         
         <div class="post-content yue">
-          <p>vector、deque、list等</p>
+          <p>swap、assign</p>
 <!-- more -->
-<table>
-<thead>
-<tr>
-<th>顺序容器表格类型</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>vector</td>
-<td>可变大小的数组。支持快速随机访问。在尾部之外的位置插入或删除元素可能很慢。</td>
-</tr>
-<tr>
-<td>deque</td>
-<td>双端队列。支持快速随机访问。在头尾位置插入/删除很快。</td>
-</tr>
-<tr>
-<td>list</td>
-<td>双向链表。只支持双向顺序访问。在list中任意位置进行插入/删除操作都很快。</td>
-</tr>
-<tr>
-<td>forward_list</td>
-<td>单向链表。只支持单向顺序访问。在链表的任何位置进行插入/删除操作都很快。</td>
-</tr>
-<tr>
-<td>array</td>
-<td>固定大小数组。支持快速随机访问。不能添加或删除元素。</td>
-</tr>
-<tr>
-<td>string</td>
-<td>与vector类似的容器，但专门用于保存字符。随机访问快。在尾部插入/删除很快。</td>
-</tr>
-</tbody>
-</table>
-<p>例如，string 和vector将元素保存在连续的内存空间中。由于元素是连续存储的，由元素的下标来计算其地址是非常快速的。</p>
-<p>但是，在这两种容器的中间位置添加或删除元素就会非常耗时：在一次插入或删除操作后，<mark>需要移动插入/删除位置之后的所有元素，来保持连续存储</mark>。</p>
-<p>而且，添加一个元素有时可能还需要分配额外的存储空间。在这种情况下，每个元素都必须移动到新的存储空间中。</p>
-<p>list 和 forward_1ist 两个容器的设计目的是令容器<mark>任何位置的添加和删除操作都很快速</mark>。作为代价，这两个容器不支持元素的随机访问：为了访问一个元素，我们只能遍历整个容器。而且，与 vector、deque 和 array 相比，这两个容器的额外内存开销也很大。</p>
-<p>forward_list 和array是新 C++标准增加的类型。与内置数组相比，array是一种更安全、更容易使用的数组类型。与内置数组类似，array对象的<mark>大小是固定</mark>的。因此， array不支持添加和删除元素以及改变容器大小的操作。</p>
-<p>forward_list的设计目标是达到与最好的手写的单向链表数据结构相当的性能。因此，forward_1ist 没有 size操作，因为保存或计算其大小就会比手写链表多出额外的开销。对其他容器而言，size保证是一个快速的常量时间的操作。</p>
-<h2 id="确定使用哪种顺序容器">确定使用哪种顺序容器</h2>
-<p>以下是使用容器的基本规则</p>
-<ul>
-<li>除非你有很好的理由选择其他容器，否则应使用 vector。</li>
-<li>如果你的程序有很多小的元素，且空间的额外开销很重要，则不要使用 list 或 forward_list。</li>
-<li>如果程序要求随机访问元素，应使用 vector 或 deque。</li>
-<li>如果程序要求在容器的中间插入或删除元素，应使用list或 forward_list。如果程序需要在头尾位置插入或删除元素，但不会在中间位置进行插入或删除操作，则使用 deque。</li>
-<li>如果程序只有在读取输入时才需要在容器中间位置插入元素，随后需要随机访问元素，则
-<ul>
-<li>首先，确定是否真的需要在容器中间位置添加元素。当处理输入数据时，通常可以很容易地向 vector 追加数据，然后再调用标准库的 sort 函数来重排容器中的元素，从而避免在中间位置添加元素。</li>
-<li>如果必须在中间位置插入元素，考虑在输入阶段使用list，一旦输入完成，将 list 中的内容拷贝到一个 vector 中。</li>
-</ul>
-</li>
-</ul>
-<p>如果你不确定应该使用哪种容器，那么可以在程序中只使用 vector和list公共的操作：使用迭代器，不使用下标操作，避免随机访问。这样，在必要时选择使用 vector 或 list 都很方便。</p>
+<p>表 9.4中列出的与赋值相关的运算符可用于所有容器。赋值运算符将其左边容器中的全部元素替换为右边容器中元素的拷贝：</p>
+<pre><code class="language-c++">c1 = c2;           // 将c1的内容替换为c2中元素的拷贝
+c1 = {a, b, c};    // 赋值后，c1大小为3
+</code></pre>
+<p>第一个赋值运算后，左边容器将与右边容器相等。如果两个容器原来大小不同，赋值运算后两者的大小都与右边容器的原大小相同。</p>
+<p>第二个赋值运算后，c1的size变为 3，即花括号列表中值的数目。</p>
+<p>与内置数组不同，标准库 array 类型允许赋值。赋值号左右两边的运算对象必须具有相同的类型：</p>
+<pre><code class="language-c++">array&lt;int, 10&gt; a1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+array&lt;int, 10&gt; s2 = {0};   // 所有元素值均为0
+a1 = a2;	               // 替换a1中的元素
+a2 = {0};                  // 错误：不能将一个花括号列表赋予数组
+</code></pre>
+<p>由于右边运算对象的大小可能与左边运算对象的大小不同，因此 <mark>array 类型不支持 assign，也不允许用花括号包围的值列表进行赋值</mark>。</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125142022.png" alt="image-20210125142022356" loading="lazy"></figure>
+<h2 id="使用assign仅顺序容器">使用assign（仅顺序容器）</h2>
+<p>赋值运算符要求左边和右边的运算对象具有相同的类型。它将右边运算对象中所有元素拷贝到左边运算对象中。</p>
+<p>顺序容器（array除外）还定义了一个名为 assign的成员，允许我们从一个<mark>不同但相容</mark>的类型赋值，或者从容器的一个子序列赋值。</p>
+<p>assign 操作用参数所指定的元素（的拷贝）替换左边容器中的所有元素。</p>
+<p>例如，我们可以用 assgin 实现将一个 vector 中的一段 char*值赋予一个list 中的 string：</p>
+<pre><code class="language-c++">list&lt;string&gt; names;
+vector&lt;const char*&gt; oldstyle;
+names = oldstyle;  // 错误：容器类型不匹配
+// 正确：可以将const char*转换为string
+names.assign(oldstyle.cbegin(), oldstyle.cend());
+</code></pre>
+<p>这段代码中对 assign 的调用将 names 中的元素替换为迭代器指定的范围中的元素的拷贝。assign 的参数决定了容器中将有多少个元素以及它们的值都是什么。</p>
+<p>assign 的第二个版本接受一个整型值和一个元素值。它用指定数目且具有相同给定值的元素替换容器中原有的元素:</p>
+<pre><code class="language-c++">// 等价于slist1.clear()
+// 后跟slist.insert(slist1.begin(), 10, &quot;Hiya&quot;);
+list&lt;string&gt; slist1(1);      // 一个元素，为空string
+slist1.assign(10, &quot;Hiya!&quot;);  // 10个元素，每个都是&quot;Hiya!&quot;
+</code></pre>
+<h2 id="使用swap">使用swap</h2>
+<p>swap操作交换两个<mark>相同类型容器</mark>的内容，调用swap后，两个容器的内容会交换。</p>
+<pre><code class="language-c++">vector&lt;string&gt; svec1(10);
+vector&lt;string&gt; svec2(24);
+swap(svec1, svec2);
+</code></pre>
+<p>调用swap后，svec1将包含24个string元素，svec2将包含10个string。除array外，交换两个容器内容的操作保证会很快——<mark>元素本身并未交换，swap 只是交换了两个容器的内部数据结构</mark>。</p>
+<p>元素不会被移动的事实意味着，除 string 外，<mark>指向容器的迭代器、引用和指针在 swap操作之后都不会失效</mark>。它们仍指向 swap操作之前所指向的那些元素。</p>
+<p>但是，在swap之后，这些元素已经属于不同的容器了。</p>
+<p>例如，假定iter在swap之前指向svec1[3]的string，那么在swap之后它指向svec2[3]的元素。与其他容器不同，<mark>对一个string调用 swap 会导致迭代器、引用和指针失效</mark>。</p>
+<p>与其他容器不同，<mark>swap两个array会真正交换它们的元素</mark>。因此，交换两个array所需的时间与 array 中元素的数目成<mark>正比</mark>。</p>
+<p>因此，对于array，在 swap操作之后，指针、引用和迭代器所绑定的元素保持不变，但<mark>元素值已经与另一个 array 中对应元素的值进行了交换</mark>。</p>
+<p>在新标准库中，容器既提供成员函数版本的 swap，也提供非成员版本的 swap。而早期标准库版本只提供成员函数版本的 swap。非成员版本的 swap在泛型编程中是非常重要的。统一使用非成员版本的 swap 是一个好习惯。</p>
 
         </div>
 
@@ -165,21 +156,12 @@
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/027ULaKt1/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  迭代器
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/uqhZ7VW6x/">
+              <a href="https://lihe.github.io/027ULaKt1/">
                 <h3 class="post-title">
-                  当函数返回值是引用
+                  迭代器
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
