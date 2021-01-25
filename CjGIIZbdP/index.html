@@ -42,7 +42,15 @@
             文章目录
           </p>
           <div class="toc-container hidden lg:block">
-            
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E7%BC%96%E8%BE%91%E6%94%B9%E5%8F%98%E5%AE%B9%E5%99%A8%E7%9A%84%E5%BE%AA%E7%8E%AF%E7%A8%8B%E5%BA%8F">编辑改变容器的循环程序</a></li>
+<li><a href="#%E4%B8%8D%E8%A6%81%E4%BF%9D%E5%AD%98end%E8%BF%94%E5%9B%9E%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%99%A8">不要保存end返回的迭代器</a></li>
+</ul>
+</li>
+</ul>
+
           </div>
         </div>
       
@@ -81,40 +89,69 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">当函数返回值是引用</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">容器操作可能会使迭代器失效</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-24 / 2 min read
+          2021-01-25 / 5 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210119213917.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125180520.jpg" alt="">
         
         <div class="post-content yue">
-          <p>调用一个返回引用的函数得到左值</p>
+          <p>迭代器失效</p>
 <!-- more -->
-<p>同其他引用类型一样，如果函数返回引用，则该引用仅是它所引对象的一个别名。举个例子来说明，假定某函数挑出两个string 形参中较短的那个并返回其引用：函数的返回类型决定函数调用是否是左值。</p>
-<pre><code class="language-c++">const string &amp;shorterString(const string &amp;s1, const string &amp;s2){
-    return s1.size() &lt;= s2.size() ? s1 : s2;
+<p>向容器中添加元素和从容器中删除元素的操作可能会使指向容器元素的指针、引用或迭代器失效。一个失效的指针、引用或迭代器将不再表示任何元素。使用失效的指针、引用或迭代器是一种严重的程序设计错误，很可能引起与使用未初始化指针一样的问题。</p>
+<ul>
+<li>如果容器是vector或string，且存储空间被重新分配，则指向容器的迭代器、指针和引用都会失效。如果存储空间未重新分配，指向插入位置之前的元素的迭代器、指针和引用仍有效，但指向插入位置之后元素的迭代器、指针和引用将会失效。</li>
+<li>对于 deque，插入到除首尾位置之外的任何位置都会导致迭代器、指针和引用失效。如果在首尾位置添加元素，迭代器会失效，但指向存在的元素的引用和指针不会失效。</li>
+<li>对于 list 和 forward_list，指向容器的迭代器（包括尾后迭代器和首前迭代器）、指针和引用仍有效。</li>
+</ul>
+<p>当我们从一个容器中删除元素后，指向被删除元素的迭代器、指针和引用会失效。毕竟，这些元素都已经被销毁了。当我们删除一个元素后：</p>
+<ul>
+<li>对于 list 和 forward_1list，指向容器其他位置的迭代器（包括尾后迭代器和首前迭代器）、引用和指针仍有效。</li>
+<li>对于 deque，如果在首尾之外的任何位置删除元素，那么指向被删除元素外其他元素的迭代器、引用或指针也会失效。如果是删除 deque 的尾元素，则尾后迭代器也会失效，但其他迭代器、引用和指针不受影响;如果是删除首元素，这些也不会受影响。</li>
+<li>对于vector和string，指向被删元素之前元素的迭代器、引用和指针仍有效。注意∶ 当我们删除元素时，尾后迭代器总是会失效。</li>
+</ul>
+<h2 id="编辑改变容器的循环程序">编辑改变容器的循环程序</h2>
+<p>添加/删除 vector、string 或 deque 元素的循环程序必须考虑迭代器、引用和指针可能失效的问题。</p>
+<p>程序必须保证每个循环步中都更新迭代器、引用或指针。如果循环中调用的是 insert 或 erase，那么更新迭代器很容易。这些操作都返回迭代器，我们可以用来更新：</p>
+<pre><code class="language-c++">vector&lt;int&gt; vi = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+auto iter = vi.begin();
+while (iter != vi.end()){
+    if (*iter % 2){
+        iter = vi.insert(iter, *iter);   // 复制当前元素
+        iter += 2;                       // 向前移动迭代器
+    }
+    else{
+        iter = iv.erase(iter);           // 删除偶数元素
+    }
 }
 </code></pre>
-<p>其中形参和返回类型都是 const string 的引用，不管是调用函数还是返回结果都不会真正拷贝 string对象。</p>
-<p>调用一个返回引用的函数得到左值，其他返回类型得到右值。</p>
-<p>可以像使用其他左值那样来使用返回引用的函数的调用，特别是，我们能为返回类型是非常量引用的函数的结果赋值∶</p>
-<pre><code class="language-c++">char &amp;get_val(string &amp;str, string::size_type ix){
-    return str[ix];
-}
-
-int main(){
-    string s(&quot;a value&quot;);
-    cout &lt;&lt; s &lt;&lt; endl;
-    get_val(s, 0) = 'A';
-    cout &lt;&lt; a &lt;&lt; endl;
-    return 0;
+<p>此程序删除 vector 中的偶数值元素，并复制每个奇数值元素。我们在<mark>调用insert 和 erase 后都更新迭代器</mark>，因为两者都会使迭代器失效。</p>
+<p>在调用erase 后，不必递增迭代器，因为erase 返回的迭代器已经指向序列中下一个元素。</p>
+<p>调用insert 后，需要递增迭代器两次。记住，insert在给定位置之前插入新元素，然后返回指向新插入元素的迭代器。因此，在调用 insert 后，iter 指向新插入元素，位于我们正在处理的元素之前。我们将迭代器递增两次，恰好越过了新添加的元素和正在处理的元素，指向下一个未处理的元素。</p>
+<h2 id="不要保存end返回的迭代器">不要保存end返回的迭代器</h2>
+<p>当我们添加/删除 vector 或 string 的元素后，或在 deque 中首元素之外任何位置添加/删除元素后，<mark>原来 end 返回的迭代器总是会失效</mark>。</p>
+<p>因此，添加或删除元素的循环程序<mark>必须反复调用 end，而不能在循环之前保存 end 返回的迭代器</mark>，一直当作容器末尾使用。</p>
+<p>通常 C++标准库的实现中 end（）操作都很快，部分就是因为这个原因。</p>
+<p>例如，考虑这样一个循环，它处理容器中的每个元素，在其后添加一个新元素。我们希望循环能跳过新添加的元素，只处理原有元素。在每步循环之后，我们将定位迭代器，使其指向下一个原有元素。如果我们试图&quot;优化&quot;这个循环，在循环之前保存end（）返回的迭代器，一直用作容器末尾，就会导致一场灾难：</p>
+<pre><code class="language-c++">// 此循环的行为时未定义的
+auto begin = v.begin(), end = v.end();
+while (begin != end){
+    // 做一些处理
+    // 插入新值，对begin重新定义，否则它会失效
+    begin ++;  // 向前移动
+    begin = v.insert(begin, 42);
+    begin ++;  // 跳过刚刚插入的元素
 }
 </code></pre>
-<p>把函数调用放在赋值语句的左侧可能看起来有点奇怪，但其实这没什么特别的。</p>
-<p>返回值是引用，因此调用是个左值，和其他左值一样它也能出现在赋值运算符的左侧。</p>
-<p>如果返回类型是常量引用，我们不能给调用的结果赋值，这一点和我们熟悉的情况是一样的∶</p>
-<pre><code class="language-c++">shorterString(&quot;hi&quot;, &quot;bye&quot;) = &quot;X&quot;;     // 错误：返回值是一个常量
+<p>此代码的行为是未定义的。在很多标准库实现上，此代码会导致无限循环。问题在于我们将end操作返回的迭代器保存在一个名为 end 的局部变量中。在循环体中，我们向容器中添加了一个元素，<mark>这个操作使保存在 end 中的迭代器失效了</mark>。这个迭代器不再指向v中任何元素，或是 v 中尾元素之后的位置。</p>
+<pre><code class="language-c++">// 在每个循环之后都重新计算end
+while (begin != v.end()){
+    // 做了一些处理
+    begin ++;
+    begin = v.insert(begin, 42);
+    begin ++;
+}
 </code></pre>
 
         </div>
@@ -128,21 +165,12 @@ int main(){
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/9l5KCVQpu/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  顺序容器
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/ys3lkqN2L/">
+              <a href="https://lihe.github.io/WjgxKD26t/">
                 <h3 class="post-title">
-                  const限定符
+                  特殊的forward_list操作
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
