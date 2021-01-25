@@ -42,15 +42,7 @@
             文章目录
           </p>
           <div class="toc-container hidden lg:block">
-            <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E4%BD%BF%E7%94%A8assign%E4%BB%85%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8">使用assign（仅顺序容器）</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8swap">使用swap</a></li>
-</ul>
-</li>
-</ul>
-
+            
           </div>
         </div>
       
@@ -89,61 +81,40 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">swap与assign</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">特殊的forward_list操作</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-25 / 5 min read
+          2021-01-25 / 3 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125143850.png" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125165720.jpg" alt="">
         
         <div class="post-content yue">
-          <p>swap、assign</p>
+          <p>before_begin()、insert_after()、erase_after()</p>
 <!-- more -->
-<p>表 9.4中列出的与赋值相关的运算符可用于所有容器。赋值运算符将其左边容器中的全部元素替换为右边容器中元素的拷贝：</p>
-<pre><code class="language-c++">c1 = c2;           // 将c1的内容替换为c2中元素的拷贝
-c1 = {a, b, c};    // 赋值后，c1大小为3
+<p>当添加或删除一个元素时，删除或添加的元素之前的那个元素的后继会发生改变。为了添加或删除一个元素，我们需要访问其前驱，以便改变前驱的链接。</p>
+<p>但是， forward_list 是单向链表。在一个单向链表中，没有简单的方法来获取一个元素的前驱。出于这个原因，在一个 forward_list 中添加或删除元素的操作是通过<mark>改变给定元素之后的元素</mark>来完成的。这样，我们总是可以访问到被添加或删除操作所影响的元素。</p>
+<p>由于这些操作与其他容器上的操作的实现方式不同，forward_list 并未定义 insert、emplace和erase，而是定义了名为insert_after、emplace_after和 erase_after 的操作（参见表 9.8）。</p>
+<p>例如，在我们的例子中，为了删除 elem3，应该用指向 elem2的迭代器调用 erase_after。为了支持这些操作，forward_list也定义了 before_begin，它返回一个首前（off-the-beginning）迭代器。</p>
+<p>这个迭代器允许我们在链表首元素之前并不存在的元素&quot;之后&quot;添加或删除元素（亦即在链表首元素之前添加删除元素）。</p>
+<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125164305.png" alt="image-20210125164304986" loading="lazy"></figure>
+<p>当在 forward_list 中添加或删除元素时，我们必须关注两个迭代器——一个指向我们要处理的元素，另一个指向其前驱。例如，可以改写第312 页中从list中删除奇数元素的循环程序，将其改为从 forward list 中删除元素：</p>
+<pre><code class="language-c++">forward_list&lt;int&gt; flst = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+auto prev = flst.before_begin();          // 表示flst的首前元素
+auto curr = flst.begin();                 // 表示flst的第一个元素
+while (curr != flst.end()){               // 仍有元素要处理
+    if (*curr % 2)                        // 若元素为奇数
+        curr = flst.erase_after(prev);    // 删除它并移动curr
+    else{
+        prev = curr;
+        curr++;                           // 移动迭代器
+    }
+}
 </code></pre>
-<p>第一个赋值运算后，左边容器将与右边容器相等。如果两个容器原来大小不同，赋值运算后两者的大小都与右边容器的原大小相同。</p>
-<p>第二个赋值运算后，c1的size变为 3，即花括号列表中值的数目。</p>
-<p>与内置数组不同，标准库 array 类型允许赋值。赋值号左右两边的运算对象必须具有相同的类型：</p>
-<pre><code class="language-c++">array&lt;int, 10&gt; a1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-array&lt;int, 10&gt; s2 = {0};   // 所有元素值均为0
-a1 = a2;	               // 替换a1中的元素
-a2 = {0};                  // 错误：不能将一个花括号列表赋予数组
-</code></pre>
-<p>由于右边运算对象的大小可能与左边运算对象的大小不同，因此 <mark>array 类型不支持 assign，也不允许用花括号包围的值列表进行赋值</mark>。</p>
-<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125142022.png" alt="image-20210125142022356" loading="lazy"></figure>
-<h2 id="使用assign仅顺序容器">使用assign（仅顺序容器）</h2>
-<p>赋值运算符要求左边和右边的运算对象具有相同的类型。它将右边运算对象中所有元素拷贝到左边运算对象中。</p>
-<p>顺序容器（array除外）还定义了一个名为 assign的成员，允许我们从一个<mark>不同但相容</mark>的类型赋值，或者从容器的一个子序列赋值。</p>
-<p>assign 操作用参数所指定的元素（的拷贝）替换左边容器中的所有元素。</p>
-<p>例如，我们可以用 assgin 实现将一个 vector 中的一段 char*值赋予一个list 中的 string：</p>
-<pre><code class="language-c++">list&lt;string&gt; names;
-vector&lt;const char*&gt; oldstyle;
-names = oldstyle;  // 错误：容器类型不匹配
-// 正确：可以将const char*转换为string
-names.assign(oldstyle.cbegin(), oldstyle.cend());
-</code></pre>
-<p>这段代码中对 assign 的调用将 names 中的元素替换为迭代器指定的范围中的元素的拷贝。assign 的参数决定了容器中将有多少个元素以及它们的值都是什么。</p>
-<p>assign 的第二个版本接受一个整型值和一个元素值。它用指定数目且具有相同给定值的元素替换容器中原有的元素:</p>
-<pre><code class="language-c++">// 等价于slist1.clear()
-// 后跟slist.insert(slist1.begin(), 10, &quot;Hiya&quot;);
-list&lt;string&gt; slist1(1);      // 一个元素，为空string
-slist1.assign(10, &quot;Hiya!&quot;);  // 10个元素，每个都是&quot;Hiya!&quot;
-</code></pre>
-<h2 id="使用swap">使用swap</h2>
-<p>swap操作交换两个<mark>相同类型容器</mark>的内容，调用swap后，两个容器的内容会交换。</p>
-<pre><code class="language-c++">vector&lt;string&gt; svec1(10);
-vector&lt;string&gt; svec2(24);
-swap(svec1, svec2);
-</code></pre>
-<p>调用swap后，svec1将包含24个string元素，svec2将包含10个string。除array外，交换两个容器内容的操作保证会很快——<mark>元素本身并未交换，swap 只是交换了两个容器的内部数据结构</mark>。</p>
-<p>元素不会被移动的事实意味着，除 string 外，<mark>指向容器的迭代器、引用和指针在 swap操作之后都不会失效</mark>。它们仍指向 swap操作之前所指向的那些元素。</p>
-<p>但是，在swap之后，这些元素已经属于不同的容器了。</p>
-<p>例如，假定iter在swap之前指向svec1[3]的string，那么在swap之后它指向svec2[3]的元素。与其他容器不同，<mark>对一个string调用 swap 会导致迭代器、引用和指针失效</mark>。</p>
-<p>与其他容器不同，<mark>swap两个array会真正交换它们的元素</mark>。因此，交换两个array所需的时间与 array 中元素的数目成<mark>正比</mark>。</p>
-<p>因此，对于array，在 swap操作之后，指针、引用和迭代器所绑定的元素保持不变，但<mark>元素值已经与另一个 array 中对应元素的值进行了交换</mark>。</p>
-<p>在新标准库中，容器既提供成员函数版本的 swap，也提供非成员版本的 swap。而早期标准库版本只提供成员函数版本的 swap。非成员版本的 swap在泛型编程中是非常重要的。统一使用非成员版本的 swap 是一个好习惯。</p>
+<p>此例中，curr表示我们要处理的元素，prev表示 curr的前驱。</p>
+<p>调用begin来初始化 curr，这样第一步循环就会检查第一个元素是否是奇数。</p>
+<p>我们用before_begin来初始化 prev，它返回指向 curr 之前不存在的元素的迭代器。</p>
+<p>当找到奇数元素后，我们将 prev 传递给 erase_after。此调用将 prev之后的元素删除，即，删除 curr指向的元素。</p>
+<p>然后我们将curr重置为erase_after的返回值（返回指向最后一个被删元素之后位置的迭代器），使得 curr指向序列中下一个元素，prev保持不变，仍指向（新）curr之前的元素。如果 curr 指向的元素不是奇数，在 else 中我们将两个迭代器都向前移动。</p>
 
         </div>
 
@@ -156,21 +127,12 @@ swap(svec1, svec2);
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/BpsJjNxeO/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  向顺序容器添加元素
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/027ULaKt1/">
+              <a href="https://lihe.github.io/BpsJjNxeO/">
                 <h3 class="post-title">
-                  迭代器
+                  向顺序容器添加元素
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
