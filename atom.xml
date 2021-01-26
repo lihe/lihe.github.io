@@ -2,13 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lihe.github.io</id>
     <title>Leslie</title>
-    <updated>2021-01-26T09:55:29.404Z</updated>
+    <updated>2021-01-26T13:28:46.551Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lihe.github.io"/>
     <link rel="self" href="https://lihe.github.io/atom.xml"/>
     <logo>https://lihe.github.io/images/avatar.png</logo>
     <icon>https://lihe.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leslie</rights>
+    <entry>
+        <title type="html"><![CDATA[lambda表达式]]></title>
+        <id>https://lihe.github.io/8-japh06H/</id>
+        <link href="https://lihe.github.io/8-japh06H/">
+        </link>
+        <updated>2021-01-26T13:26:38.000Z</updated>
+        <summary type="html"><![CDATA[<p>一个 lambda 表达式表示一个可调用的代码单元。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>一个 lambda 表达式表示一个可调用的代码单元。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[C++谓词]]></title>
         <id>https://lihe.github.io/rdTpuYSnl/</id>
@@ -106,17 +117,6 @@
         <summary type="html"><![CDATA[<p>调用一个返回引用的函数得到左值</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>调用一个返回引用的函数得到左值</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[const限定符]]></title>
-        <id>https://lihe.github.io/ys3lkqN2L/</id>
-        <link href="https://lihe.github.io/ys3lkqN2L/">
-        </link>
-        <updated>2021-01-24T05:00:43.000Z</updated>
-        <summary type="html"><![CDATA[<p>const的应用、const和指针、顶层const、constexpr和常量表达式</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>const的应用、const和指针、顶层const、constexpr和常量表达式</p>
 ]]></content>
     </entry>
 </feed>
