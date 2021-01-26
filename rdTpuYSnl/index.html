@@ -81,40 +81,29 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">特殊的forward_list操作</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">C++谓词</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-25 / 3 min read
+          2021-01-26 / 2 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125165720.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210126175316.jpg" alt="">
         
         <div class="post-content yue">
-          <p>before_begin()、insert_after()、erase_after()</p>
+          <p>一元谓词和二元谓词</p>
 <!-- more -->
-<p>当添加或删除一个元素时，删除或添加的元素之前的那个元素的后继会发生改变。为了添加或删除一个元素，我们需要访问其前驱，以便改变前驱的链接。</p>
-<p>但是， forward_list 是单向链表。在一个单向链表中，没有简单的方法来获取一个元素的前驱。出于这个原因，在一个 forward_list 中添加或删除元素的操作是通过<mark>改变给定元素之后的元素</mark>来完成的。这样，我们总是可以访问到被添加或删除操作所影响的元素。</p>
-<p>由于这些操作与其他容器上的操作的实现方式不同，forward_list 并未定义 insert、emplace和erase，而是定义了名为insert_after、emplace_after和 erase_after 的操作（参见表 9.8）。</p>
-<p>例如，在我们的例子中，为了删除 elem3，应该用指向 elem2的迭代器调用 erase_after。为了支持这些操作，forward_list也定义了 before_begin，它返回一个首前（off-the-beginning）迭代器。</p>
-<p>这个迭代器允许我们在链表首元素之前并不存在的元素&quot;之后&quot;添加或删除元素（亦即在链表首元素之前添加删除元素）。</p>
-<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125164305.png" alt="image-20210125164304986" loading="lazy"></figure>
-<p>当在 forward_list 中添加或删除元素时，我们必须关注两个迭代器——一个指向我们要处理的元素，另一个指向其前驱。例如，可以改写第312 页中从list中删除奇数元素的循环程序，将其改为从 forward list 中删除元素：</p>
-<pre><code class="language-c++">forward_list&lt;int&gt; flst = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-auto prev = flst.before_begin();          // 表示flst的首前元素
-auto curr = flst.begin();                 // 表示flst的第一个元素
-while (curr != flst.end()){               // 仍有元素要处理
-    if (*curr % 2)                        // 若元素为奇数
-        curr = flst.erase_after(prev);    // 删除它并移动curr
-    else{
-        prev = curr;
-        curr++;                           // 移动迭代器
-    }
+<p>谓词是一个可调用的表达式，其返回结果是一个能用作条件的值。</p>
+<p>标准库算法所使用的谓词分为两类：<mark>一元谓词</mark>（unary predicate，意味着它们只接受单一参数）和<mark>二元谓词</mark>（binary predicate，意味着它们有两个参数）。</p>
+<p>接受谓词参数的算法对输入序列中的元素调用谓词。因此，元素类型必须能转换为谓词的参数类型。</p>
+<p>接受一个二元谓词参数的 sort 版本用这个谓词代替 &lt; 来比较元素。</p>
+<p>此操作必须在输入序列中所有可能的元素值上定义一个一致的序。</p>
+<pre><code class="language-c++">bool isShorter(const string &amp;s1, const string &amp;s2){
+    return s1.size() &lt; s2.size();
 }
+//
+sort(words.begin(), words.end(), isShorter);
 </code></pre>
-<p>此例中，curr表示我们要处理的元素，prev表示 curr的前驱。</p>
-<p>调用begin来初始化 curr，这样第一步循环就会检查第一个元素是否是奇数。</p>
-<p>我们用before_begin来初始化 prev，它返回指向 curr 之前不存在的元素的迭代器。</p>
-<p>当找到奇数元素后，我们将 prev 传递给 erase_after。此调用将 prev之后的元素删除，即，删除 curr指向的元素。</p>
-<p>然后我们将curr重置为erase_after的返回值（返回指向最后一个被删元素之后位置的迭代器），使得 curr指向序列中下一个元素，prev保持不变，仍指向（新）curr之前的元素。如果 curr 指向的元素不是奇数，在 else 中我们将两个迭代器都向前移动。</p>
+<p>isShorter 就是一个满足这些要求的函数，因此可以将 isShorter 传递给 sort。这样做会将元素按大小重新排序：</p>
+<p>此调用会将words 重排，使得所有长度为3的单词排在长度为 4的单词之前，然后是长度为 5 的单词，依此类推。</p>
 
         </div>
 
@@ -127,21 +116,12 @@ while (curr != flst.end()){               // 仍有元素要处理
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/CjGIIZbdP/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  容器操作可能会使迭代器失效
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/BpsJjNxeO/">
+              <a href="https://lihe.github.io/BqcKCzcK1/">
                 <h3 class="post-title">
-                  向顺序容器添加元素
+                  capacity和size
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
