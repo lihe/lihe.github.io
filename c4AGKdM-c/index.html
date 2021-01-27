@@ -81,46 +81,22 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">capacity和size</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">尾置返回类型</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-25 / 3 min read
+          2021-01-27 / 1 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125201243.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210127133311.jpg" alt="">
         
         <div class="post-content yue">
-          <p>capacity和size的区别</p>
+          <p>函数真正的返回类型跟在形参列表之后</p>
 <!-- more -->
-<p>如表 9.10 所示，vector 和 string类型提供了一些成员函数，允许我们与它的实现中内存分配部分互动。capacity 操作告诉我们容器在不扩张内存空间的情况下可以容纳多少个元素。reserve操作允许我们通知容器它应该准备保存多少个元素。</p>
-<figure data-type="image" tabindex="1"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125195859.png" alt="image-20210125195858989" loading="lazy"></figure>
-<p>只有当需要的内存空间超过当前容量时，reserve 调用才会改变 vector 的容量。如果需求大小大于当前容量，reserve 至少分配与需求一样大的内存空间（可能更大）。</p>
-<p>理解 capacity和size 的区别非常重要。容器的size是指它<mark>已经保存</mark>的元素的数目；而 capacity 则是在<mark>不分配新的内存空间的前提下</mark>它最多可以保存多少元素。</p>
-<p>下面的代码展示了 size 和 capacity 之间的相互作用∶</p>
-<pre><code class="language-c++">vector&lt;int&gt; ivec;
-// size应该为0；capacit的值依赖具体实现
-cout &lt;&lt; &quot;ivec: size: &quot; &lt;&lt; ivec.size() &lt;&lt; &quot;capacity: &quot; &lt;&lt; ivec.capacity() &lt;&lt; endl;
-//向ivec添加24个元素
-for (vector&lt;int&gt;::size_type ix = 0; ix != 24; ix++)
-    ivec.push_back(ix);
-//size的值应该为24；capacity应该大于等于24
-cout &lt;&lt; &quot;ivec: size: &quot; &lt;&lt; ivec.size() &lt;&lt; &quot;capacity: &quot; &lt;&lt; ivec.capacity() &lt;&lt; endl;
+<p>在C++11新标准中还有一种可以简化 func 声明的方法，就是使用尾置返回类型（trailing return type）。任何函数的定义都能使用尾置返回，但是这种形式对于返回类型比较复杂的函数最有效，比如返回类型是数组的指针或者数组的引用。</p>
+<p>尾置返回类型跟在形参列表后面并以一个 -&gt; 符号开头。为了表示函数真正的返回类型跟在形参列表之后，我们在本应该出现返回类型的地方放置一个 auto：</p>
+<pre><code class="language-c++">// func接受了一个int类型的实参，返回了一个指针，该指针指向一个含有10个整数的数组
+auto func(int i) -&gt; int (*)[10];
 </code></pre>
-<p>我们知道一个空 vector 的 size 为 0，显然在我们的标准库实现中一个空 vector 的 capacity也为0。</p>
-<p>当向 vector中添加元素时，我们知道 size与添加的元素数目相等。而 capacity<mark>至少</mark>与size一样大，具体会分配多少额外空间则视标准库具体实现而定。</p>
-<p>在我们的标准库实现中，每次添加1个元素，共添加 24个元素，会使capacity变为32。</p>
-<p>可以想象 ivec 的当前状态如下图所示∶</p>
-<figure data-type="image" tabindex="2"><img src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210125200542.png" alt="image-20210125200542702" loading="lazy"></figure>
-<p>现在可以分配一些额外空间：</p>
-<pre><code class="language-c++">ivec.capacity(50);  // 将capacity设置为50，可能会更大
-
-cout &lt;&lt; &quot;ivec: size: &quot; &lt;&lt; ivec.size() &lt;&lt; &quot;capacity: &quot; &lt;&lt; ivec.capacity() &lt;&lt; endl;
-</code></pre>
-<p>我们可以调用shrink_to_fit来要求vector将超出当前大小的多余内存退回给系统：</p>
-<pre><code class="language-c++">ivec.shrink_to_fit();    // 要求归还内存
-
-cout &lt;&lt; &quot;ivec: size: &quot; &lt;&lt; ivec.size() &lt;&lt; &quot;capacity: &quot; &lt;&lt; ivec.capacity() &lt;&lt; endl;
-</code></pre>
-<p>调用shrink_to_fit只是一个请求，标准库并不保证退还内存。</p>
+<p>因为我们把函数的返回类型放在了形参列表之后，所以我们可以很清晰地看到func函数返回的是一个指针，并且该指针指向了一个含有10个整数的数组。</p>
 
         </div>
 
@@ -133,21 +109,12 @@ cout &lt;&lt; &quot;ivec: size: &quot; &lt;&lt; ivec.size() &lt;&lt; &quot;capac
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/rdTpuYSnl/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  C++谓词
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/CjGIIZbdP/">
+              <a href="https://lihe.github.io/8-japh06H/">
                 <h3 class="post-title">
-                  容器操作可能会使迭代器失效
+                  lambda表达式
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
