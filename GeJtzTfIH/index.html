@@ -45,7 +45,8 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E7%A1%AE%E5%AE%9A%E4%BD%BF%E7%94%A8%E5%93%AA%E7%A7%8D%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8">确定使用哪种顺序容器</a></li>
+<li><a href="#%E6%8C%87%E5%AE%9A%E4%BB%8E%E5%93%AA%E9%87%8C%E5%BC%80%E5%A7%8B%E6%90%9C%E7%B4%A2">指定从哪里开始搜索</a></li>
+<li><a href="#%E9%80%86%E5%90%91%E6%90%9C%E7%B4%A2">逆向搜索</a></li>
 </ul>
 </li>
 </ul>
@@ -88,71 +89,111 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">顺序容器</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">C++ find()函数</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2021-01-24 / 4 min read
+          2021-01-29 / 4 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210124182059.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://cdn.jsdelivr.net/gh/lihe/Pic/img/20210129145015.jpg" alt="">
         
         <div class="post-content yue">
-          <p>vector、deque、list等</p>
+          <p>find()、find_first_of()、find_first_not_of()</p>
 <!-- more -->
+<p>string类提供了6个不同的搜索函数，每个函数都有4个重载版本。</p>
+<p>下表描述了这些搜索成员函数及其参数。每个搜索操作都返回一个string∶size_type值，表示匹配发生位置的下标。如果搜索失败，则返回一个名为 string∶inpos的static成员。</p>
+<p>标准库将npos定义为一个const string∶size_type类型，并初始化为值-1。由于npos 是一个 unsigned类型，此初始值意味着 npos 等于任何 string最大的可能大小。</p>
+<p>find函数完成最简单的搜索。它查找参数指定的字符串，若找到，则返回第一个匹配的下标，否则返回npos：</p>
+<pre><code class="language-c++">string name(&quot;AnnaBelle&quot;);
+auto pos1 = name.find(&quot;Anna&quot;);   //pos1 = 0
+</code></pre>
+<p>这段程序返回0，即字符串&quot;Anna&quot;在&quot;AnnaBelle&quot;中第一次出现的下标。</p>
+<p><mark>搜索是大小写敏感的。</mark></p>
+<p>一个更复杂的问题是查找与给定字符串中任何一个字符匹配的位置。例如，下面代码定位name中的第一个数字：</p>
+<pre><code class="language-c++">string numbers(&quot;0123456789&quot;), name(&quot;r2d2&quot;);
+// 返回1，即，name中第一个数字的下标
+auto pos = name.find_first_of(numbers);
+</code></pre>
+<p>如果是要搜索第一个不在参数中的字符，我们应该调用find_first_not_of。例如，为了搜索string中第一个非数字字符。可以这样做：</p>
+<pre><code class="language-c++">string dept(&quot;03714p3&quot;);
+// 返回5
+auto pos = dept.find_first_not_of(numbers);
+</code></pre>
 <table>
 <thead>
 <tr>
-<th>顺序容器表格类型</th>
+<th>搜索操作返回指定字符出现的下标，如果未找到返回pos</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>vector</td>
-<td>可变大小的数组。支持快速随机访问。在尾部之外的位置插入或删除元素可能很慢。</td>
+<td>s.find(args)</td>
+<td>查找s中args第一次出现的位置</td>
 </tr>
 <tr>
-<td>deque</td>
-<td>双端队列。支持快速随机访问。在头尾位置插入/删除很快。</td>
+<td>s.rfind(args)</td>
+<td>查找s中args最后一次出现的位置</td>
 </tr>
 <tr>
-<td>list</td>
-<td>双向链表。只支持双向顺序访问。在list中任意位置进行插入/删除操作都很快。</td>
+<td>s.find_first_of(args)</td>
+<td>在s中查找args中任何一个字符第一次出现的位置</td>
 </tr>
 <tr>
-<td>forward_list</td>
-<td>单向链表。只支持单向顺序访问。在链表的任何位置进行插入/删除操作都很快。</td>
+<td>s.find_last_of(args)</td>
+<td>在s中查找args中任何一个字符最后一次出现的位置</td>
 </tr>
 <tr>
-<td>array</td>
-<td>固定大小数组。支持快速随机访问。不能添加或删除元素。</td>
+<td>s.find_first_not_of(args)</td>
+<td>在s中查找第一个不在args中的字符</td>
 </tr>
 <tr>
-<td>string</td>
-<td>与vector类似的容器，但专门用于保存字符。随机访问快。在尾部插入/删除很快。</td>
+<td>s.find_last_not_of(args)</td>
+<td>在s中查找最后一个不在args中的字符</td>
 </tr>
 </tbody>
 </table>
-<p>例如，string 和vector将元素保存在连续的内存空间中。由于元素是连续存储的，由元素的下标来计算其地址是非常快速的。</p>
-<p>但是，在这两种容器的中间位置添加或删除元素就会非常耗时：在一次插入或删除操作后，<mark>需要移动插入/删除位置之后的所有元素，来保持连续存储</mark>。</p>
-<p>而且，添加一个元素有时可能还需要分配额外的存储空间。在这种情况下，每个元素都必须移动到新的存储空间中。</p>
-<p>list 和 forward_1ist 两个容器的设计目的是令容器<mark>任何位置的添加和删除操作都很快速</mark>。作为代价，这两个容器不支持元素的随机访问：为了访问一个元素，我们只能遍历整个容器。而且，与 vector、deque 和 array 相比，这两个容器的额外内存开销也很大。</p>
-<p>forward_list 和array是新 C++标准增加的类型。与内置数组相比，array是一种更安全、更容易使用的数组类型。与内置数组类似，array对象的<mark>大小是固定</mark>的。因此， array不支持添加和删除元素以及改变容器大小的操作。</p>
-<p>forward_list的设计目标是达到与最好的手写的单向链表数据结构相当的性能。因此，forward_1ist 没有 size操作，因为保存或计算其大小就会比手写链表多出额外的开销。对其他容器而言，size保证是一个快速的常量时间的操作。</p>
-<h2 id="确定使用哪种顺序容器">确定使用哪种顺序容器</h2>
-<p>以下是使用容器的基本规则</p>
-<ul>
-<li>除非你有很好的理由选择其他容器，否则应使用 vector。</li>
-<li>如果你的程序有很多小的元素，且空间的额外开销很重要，则不要使用 list 或 forward_list。</li>
-<li>如果程序要求随机访问元素，应使用 vector 或 deque。</li>
-<li>如果程序要求在容器的中间插入或删除元素，应使用list或 forward_list。如果程序需要在头尾位置插入或删除元素，但不会在中间位置进行插入或删除操作，则使用 deque。</li>
-<li>如果程序只有在读取输入时才需要在容器中间位置插入元素，随后需要随机访问元素，则
-<ul>
-<li>首先，确定是否真的需要在容器中间位置添加元素。当处理输入数据时，通常可以很容易地向 vector 追加数据，然后再调用标准库的 sort 函数来重排容器中的元素，从而避免在中间位置添加元素。</li>
-<li>如果必须在中间位置插入元素，考虑在输入阶段使用list，一旦输入完成，将 list 中的内容拷贝到一个 vector 中。</li>
-</ul>
-</li>
-</ul>
-<p>如果你不确定应该使用哪种容器，那么可以在程序中只使用 vector和list公共的操作：使用迭代器，不使用下标操作，避免随机访问。这样，在必要时选择使用 vector 或 list 都很方便。</p>
+<table>
+<thead>
+<tr>
+<th>args必须是下列形式之一</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c, pos</td>
+<td>从s中位置pos开始查找字符c，pos默认为0</td>
+</tr>
+<tr>
+<td>s2, pos</td>
+<td>从c中位置pos开始查找字符串s2，pos默认为0</td>
+</tr>
+<tr>
+<td>cp, pos</td>
+<td>从s中位置pos开始查找指针cp指向的以空字符为结尾的c风格字符串，pos默认为0</td>
+</tr>
+<tr>
+<td>cp, pos, n</td>
+<td>从s中位置pos开始查找指针cp指向的数组的前n个字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="指定从哪里开始搜索">指定从哪里开始搜索</h2>
+<p>我们可以传递给 find操作一个可选的开始位置。这个可选的参数指出从哪个位置开始进行搜索。默认情况下，此位置被置为 0。一种常见的程序设计模式是用这个可选参数在字符串中循环地搜索子字符串出现的所有位置：</p>
+<pre><code class="language-c++">string::size_type pos = 0;
+//
+while ((pos = name.find_first_of(numbers, pos)) != string::npos){
+    cout &lt;&lt; &quot;found number at index: &quot; &lt;&lt; pos &lt;&lt;
+        &quot; element is &quot; &lt;&lt; name[pos] &lt;&lt; endl;
+    pos++;
+}
+</code></pre>
+<h2 id="逆向搜索">逆向搜索</h2>
+<p>到现在为止，我们已经用过的 find 操作都是由左至右搜索。标准库还提供了类似的，但由右至左搜索的操作。rfind成员函数搜索最后一个匹配，即子字符串最靠右的出现位置：</p>
+<pre><code class="language-c++">string river(&quot;Mississippi&quot;);
+auto first_pos = river.find(&quot;is&quot;);   // 返回1
+auto last_pos = river.rfind(&quot;is&quot;);   // 返回4
+</code></pre>
 
         </div>
 
@@ -165,21 +206,12 @@
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://lihe.github.io/027ULaKt1/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  迭代器
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://lihe.github.io/uqhZ7VW6x/">
+              <a href="https://lihe.github.io/bgH4Fmn_y/">
                 <h3 class="post-title">
-                  当函数返回值是引用
+                  bind函数
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
